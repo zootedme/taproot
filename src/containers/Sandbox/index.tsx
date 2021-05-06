@@ -1,31 +1,38 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useRef, useState } from "react"
 import { Stage, Layer } from "react-konva"
 import { Vector2d } from "konva/types/types"
 import { KonvaEventObject } from "konva/types/Node"
 import { not } from "ramda"
 
 import {
-  CONTROLLER_ROTATION,
-  CONTROLLER_SIZE,
   MASK_HEIGHT,
   MASK_WIDTH,
-  RENDER_TIME,
+  BLOCK_HEIGHT,
+  BLOCK_WIDTH,
   SCALE_FACTOR,
   STAGE_HEIGHT,
   STAGE_WIDTH,
+  MASK_SCALE,
+  BLOCK_SCALE, CONTROLLER_SIZE,
 } from "../../helpers/const"
-
-import { download, detectFace, loadModels } from "../../helpers/utils"
-
-import Controller from "../Controller"
+import { download } from "../../helpers/utils"
 import { IconEdit, IconSave, IconShare } from "../../icons"
 import Figure from "../../components/Figure"
 import Button, { ButtonColor, ButtonSize } from "../../components/Button"
-
 import * as S from "./styled"
+import Controller from "../Controller"
 
 interface Props {
   file?: string
+}
+
+interface Overlay {
+  coordinates: Vector2d
+  scale: Vector2d
+  rotation: number
+  kind: string
+  unscaledDims: Vector2d
+  overlayScale: number
 }
 
 export enum Cursor {
@@ -40,35 +47,62 @@ export const CURSORS = new Map<Cursor, "initial" | "grab" | "grabbing">([
   [Cursor.Grabbing, "grabbing"],
 ])
 
+const defaultOverlay = () => {
+  return {
+    coordinates: {
+      x: 250,
+      y: 150,
+    },
+    rotation: 0,
+    scale: { x: CONTROLLER_SIZE, y: CONTROLLER_SIZE },
+    kind: "mask",
+    unscaledDims: {
+      x: MASK_WIDTH,
+      y: MASK_HEIGHT,
+    },
+    overlayScale: MASK_SCALE,
+  }
+}
+
 const Sandbox: React.FC<Props> = ({ file }: Props) => {
   const stageRef = useRef<any>(null)
 
-  const [coordinates, setCoordinates] = useState<Vector2d>({
-    x: 250,
-    y: 170,
-  })
-
+  const [overlays, setOverlays] = useState<Array<Overlay>>([
+    {
+      coordinates: {
+        x: 270,
+        y: 161,
+      },
+      rotation: 4,
+      scale: { x: CONTROLLER_SIZE, y: CONTROLLER_SIZE },
+      kind: "mask",
+      unscaledDims: {
+        x: MASK_WIDTH,
+        y: MASK_HEIGHT,
+      },
+      overlayScale: MASK_SCALE,
+    }
+  ])
   const [edit, setEdit] = useState<boolean>(false)
-  const [rotation, setRotation] = useState<number>(CONTROLLER_ROTATION)
-  const [scale, setScale] = useState<Vector2d>({ x: CONTROLLER_SIZE, y: CONTROLLER_SIZE })
+  const [selectedIndex, setSelectedIndex] = useState<number>(0)
+  const [hoveredIndex, setHoveredIndex] = useState<number>(0)
   const [cursor, setCursor] = useState<Cursor>(Cursor.Default)
-
-  const onDetect = async () => {
-    try {
-      const data = await detectFace(stageRef?.current?.content)
-      setRotation(data.rotation)
-      setCoordinates(data.coordinates)
-    } catch (error) {}
-  }
 
   const onEdit = () => {
     setEdit(not(edit))
   }
 
   const onScale = (scale: number) => {
-    setScale({
-      x: scale,
-      y: scale,
+    setOverlays((prev) => {
+      const next = [...prev]
+      next[selectedIndex] = {
+        ...next[selectedIndex],
+        scale: {
+          x: scale,
+          y: scale,
+        }
+      }
+      return next
     })
   }
 
@@ -78,44 +112,139 @@ const Sandbox: React.FC<Props> = ({ file }: Props) => {
     }
   }
 
-  const onDragMove = ({ target }: KonvaEventObject<DragEvent | TouchEvent>) => {
-    setCoordinates({
-      x: target.x(),
-      y: target.y(),
+  const onDragMove = (index: number, { target }: KonvaEventObject<DragEvent | TouchEvent>) => {
+    setOverlays((prev: Array<Overlay>) => {
+      const next = [...prev]
+      next[index] = {
+        ...next[index],
+        coordinates: {
+          x: target.x(),
+          y: target.y(),
+        },
+      }
+      return next
     })
   }
 
-  useEffect(() => {
-    loadModels()
-  }, [])
-
-  useEffect(() => {
-    if (file) {
-      /** @todo refactor this */
-      setTimeout(onDetect, RENDER_TIME)
+  const onSelectOverlay = (value: string) => {
+    if (value === 'mask') {
+      setOverlays((prev: Array<Overlay>) => {
+        const next = [...prev]
+        next[selectedIndex] = {...next[selectedIndex],
+          kind: "mask",
+          unscaledDims: {
+            x: MASK_WIDTH,
+            y: MASK_HEIGHT,
+          },
+          overlayScale: MASK_SCALE,
+        }
+        return next
+      })
+    } else if (value === 'block') {
+      setOverlays((prev: Array<Overlay>) => {
+        const next = [...prev]
+        next[selectedIndex] = {...next[selectedIndex],
+        kind: "block",
+        unscaledDims: {
+          x: BLOCK_WIDTH,
+          y: BLOCK_HEIGHT,
+        },
+        overlayScale: BLOCK_SCALE,
+      }
+      return next
+    })
     }
-  }, [file])
+  }
+
+  const onAddOverlay = () => {
+    const nextOverlays = [...overlays.map(o => {return {...o, selected: false}}), defaultOverlay()]
+    setOverlays(nextOverlays)
+  }
+
+  const onRemoveOverlay = () => {
+    if (overlays.length > 1) {
+      const nextOverlays = [...overlays.slice(0, overlays.length - 1)]
+      if (selectedIndex > (nextOverlays.length - 1)) {
+        setSelectedIndex(nextOverlays.length - 1)
+      }
+      setOverlays(nextOverlays)
+    }
+  }
+
+  const onMouseDown = (index: number) => {
+    setCursor(Cursor.Grabbing)
+  }
+
+  const onMouseUp = (index: number) => {
+    setCursor(Cursor.Default)
+    setSelectedIndex(index)
+  }
+
+  const onMouseEnter = (index: number) => {
+    setCursor(Cursor.Grab)
+    setHoveredIndex(index)
+  }
+
+  const onMouseLeave = (index: number) => {
+    setCursor(Cursor.Default)
+    setHoveredIndex(-1)
+  }
+
+  const onSetRotation = (rotation: number) => {
+    setOverlays((prev) => {
+      const next = [...prev]
+      next[selectedIndex] = {...next[selectedIndex],
+        rotation: rotation
+      }
+      return next
+    })
+  }
+
+  const overlayFile = (overlay?: string): string => {
+    if (overlay === 'block') {
+      return '/static/images/green-square.png'
+    } else {
+      return '/static/images/mask.svg';
+    }
+  }
+
+  const computedScale = (scale: Vector2d, overlayScale: number) => {
+    return {x: scale.x * overlayScale, y: scale.y * overlayScale}
+  }
+
+  const computedOffsetX = (overlay: Overlay) => {
+    return (overlay.unscaledDims.x / SCALE_FACTOR) / 2
+  }
+
+  const computedOffsetY = (overlay: Overlay) => {
+    return (overlay.unscaledDims.y / SCALE_FACTOR) / 2
+  }
 
   return (
     <S.Wrapper preview={file} cursor={cursor}>
       <Stage width={STAGE_WIDTH} height={STAGE_HEIGHT} ref={stageRef} className="stage">
         <Layer>
           <Figure fit src={file || "/static/images/default.png"} />
-          <Figure
-            draggable
-            scale={scale}
-            rotation={rotation}
-            src="/static/images/stripe.svg"
-            x={coordinates?.x}
-            y={coordinates?.y}
-            offsetX={MASK_WIDTH / SCALE_FACTOR}
-            offsetY={MASK_HEIGHT / SCALE_FACTOR}
-            onMouseEnter={() => setCursor(Cursor.Grab)}
-            onMouseLeave={() => setCursor(Cursor.Default)}
-            onMouseDown={() => setCursor(Cursor.Grabbing)}
-            onMouseUp={() => setCursor(Cursor.Default)}
-            onDragMove={onDragMove}
-          />
+          {overlays.map((overlay, index) => {
+            return <Figure
+              key={index}
+              draggable
+              scale={computedScale(overlay.scale, overlay.overlayScale)}
+              rotation={overlay.rotation}
+              src={overlayFile(overlay.kind)}
+              x={overlay.coordinates.x}
+              y={overlay.coordinates.y}
+              offsetX={computedOffsetX(overlay)}
+              offsetY={computedOffsetY(overlay)}
+              onMouseEnter={() => onMouseEnter(index)}
+              onMouseLeave={() => onMouseLeave(index)}
+              onMouseDown={() => onMouseDown(index)}
+              onMouseUp={() => onMouseUp(index) }
+              onDragMove={(target: KonvaEventObject<DragEvent | TouchEvent>) => onDragMove(index, target)}
+              isMouseOver={edit && hoveredIndex === index}
+              isSelected={edit && selectedIndex === index}
+            />
+          })}
         </Layer>
       </Stage>
 
@@ -124,11 +253,15 @@ const Sandbox: React.FC<Props> = ({ file }: Props) => {
           <S.Relative>
             {edit ? (
               <Controller
-                rotation={rotation}
-                scale={scale.x}
-                onRotation={setRotation}
+                rotation={overlays[selectedIndex].rotation}
+                scale={overlays[selectedIndex].scale.x}
+                overlay={overlays[selectedIndex].kind}
+                onRotation={onSetRotation}
                 onScale={onScale}
                 onClose={onEdit}
+                onSelectOverlay={onSelectOverlay}
+                onAddOverlay={onAddOverlay}
+                onRemoveOverlay={onRemoveOverlay}
               />
             ) : null}
 
@@ -137,7 +270,6 @@ const Sandbox: React.FC<Props> = ({ file }: Props) => {
               Edit effect
             </Button>
           </S.Relative>
-
           <S.Relative>
             <Button $color={ButtonColor.Red} $size={ButtonSize.Md} onClick={onSave}>
               <IconSave />
@@ -151,7 +283,7 @@ const Sandbox: React.FC<Props> = ({ file }: Props) => {
               as="a"
               target="_blank"
               rel="noreferrer"
-              href="https://twitter.com/intent/tweet?text=Layer%202%20is%20coming.%20Be%20ready%20for%20scaling%20through%20%23Optimism!&url=https%3A%2F%2Fimoptimistic.xyz&hashtags=Ethereum,Rollup,Layer2"
+              href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftaproot.fish&text=Do%20your%20part%20to%20signal%20your%20support%20for%20the%20Bitcoin%20Taproot%20upgrade%21%20Smaller%20and%20faster%20transactions%20with%20Schnorr%21%20Increased%20privacy%20for%20all%20types%20of%20transactions%21&hashtags=taproot"
             >
               <IconShare />
               Share

@@ -1,6 +1,6 @@
 {
-  "short_name": "Optimism mask",
-  "name": "Layer 2 is coming. Be ready for scaling through Optimism!",
+  "short_name": "Taproot mask",
+  "name": "Taproot is coming!",
   "icons": [
     {
       "src": "favicon.ico",
@@ -11,11 +11,6 @@
       "src": "logo192.png",
       "type": "image/png",
       "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
     }
   ],
   "start_url": ".",

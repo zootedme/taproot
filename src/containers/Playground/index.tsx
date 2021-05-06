@@ -12,7 +12,11 @@ const Playground: React.FC = () => {
   const [file, setFile] = useState<string | undefined>()
 
   const onDrop = ([file]: File[]) => {
-    setFile(URL.createObjectURL(file))
+    try {
+      setFile(URL.createObjectURL(file))
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (

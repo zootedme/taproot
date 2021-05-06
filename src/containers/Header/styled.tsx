@@ -18,7 +18,6 @@ export const Logo = styled.a`
   font-size: ${(props) => rem(props.theme.fontSize.base)};
   font-weight: ${(props) => props.theme.fontWeight.black};
   text-align: center;
-  font-style: italic;
   text-transform: uppercase;
   display: inline-block;
 

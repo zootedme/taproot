@@ -18,19 +18,19 @@ const Info: React.FC<Props> = ({ onDrop }: Props) => {
     <S.Wrapper>
       <Row middle="xs" center="xs">
         <Col xs={12}>
-          <h1>Optimism Mask</h1>
+          <h1>Taproot Mask</h1>
           <p>
-            Do your part to support Optimistic Rollups <br />
-            for Ethereum's better scaling tomorrow! Upload <br />
-            your photo, choose your mask, and download <br />
-            or share with the Twitter button!
+            Do your part to signal your support for the Bitcoin Taproot upgrade!
+            Smaller and faster transactions with Schnorr!
+            Increased privacy for all types of transactions! <br/><br/>
+            Upload your photo, choose your mask, and download or share with the Twitter button.
           </p>
           <S.Links>
-            <a href="https://optimism.io/" target="_blank" rel="noreferrer">
+            <a href="https://bitcoincore.org/en/releases/0.21.1/#taproot-soft-fork" target="_blank" rel="noreferrer">
               <IconInfo />
-              <span>Optimistic rollups</span>
+              <span>Taproot migration</span>
             </a>
-            <a href="https://youtu.be/97DU_YgNPgE" target="_blank" rel="noreferrer">
+            <a href="https://www.youtube.com/watch?v=KbF6daItSrw" target="_blank" rel="noreferrer">
               <IconYoutube />
               <span>Video explainer</span>
             </a>

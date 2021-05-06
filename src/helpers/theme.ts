@@ -40,7 +40,7 @@ const theme = {
       black: 900,
     },
     colors: {
-      primary: "#ff0000",
+      primary: "#1AB01D",
       secondary: "#0F0F0F",
       tertiary: "#3F5FBF",
       dark: "#252628",
@@ -54,5 +54,5 @@ const theme = {
       base: "0.3s ease",
     },
   };
-  
+
   export default theme

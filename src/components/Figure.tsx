@@ -11,6 +11,7 @@ import { KonvaEventObject } from "konva/types/Node"
  * Types
  */
 interface Props {
+  key?: number
   x?: number
   y?: number
   offsetX?: number
@@ -19,6 +20,8 @@ interface Props {
   scale?: Vector2d
   src?: string
   fit?: boolean
+  isMouseOver?: boolean
+  isSelected?: boolean
   draggable?: boolean
   onMouseEnter?: (event: KonvaEventObject<MouseEvent>) => void
   onMouseLeave?: (event: KonvaEventObject<MouseEvent>) => void
@@ -28,6 +31,7 @@ interface Props {
 }
 
 const Figure: React.FC<Props> = ({
+  key,
   fit,
   src,
   rotation,
@@ -42,6 +46,8 @@ const Figure: React.FC<Props> = ({
   onMouseDown,
   onMouseUp,
   onDragMove,
+  isMouseOver,
+  isSelected,
   ...rest
 }: Props) => {
   const meta = useImage(src as string)
@@ -50,6 +56,7 @@ const Figure: React.FC<Props> = ({
 
   return (
     <Image
+      key={key}
       x={x}
       y={y}
       offsetX={offsetX}
@@ -63,6 +70,9 @@ const Figure: React.FC<Props> = ({
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
       onDragEnd={onDragMove}
+      stroke={'#1AB01D'}
+      dash={[10, 10]}
+      strokeWidth={isMouseOver || isSelected ? 5 : 0}
       {...config}
     />
   )

@@ -2,6 +2,7 @@ import styled from "styled-components"
 import { rem, rgba } from "polished"
 import { slideUpPopover } from "../../core/GlobalStyles"
 import Button from "../../components/Button"
+import { RadioGroup as StockRadioGroup } from 'react-radio-buttons'
 
 export const Wrapper = styled.div`
   position: absolute;
@@ -36,7 +37,7 @@ export const Wrapper = styled.div`
   ${Button} {
     margin-top: ${rem(10)};
   }
-
+  
   [data-reach-slider-input][data-orientation="horizontal"] {
     height: 2px;
   }
@@ -110,7 +111,7 @@ export const Wrapper = styled.div`
       ~ [data-reach-slider-marker][data-orientation="horizontal"] {
         &:before {
           width: ${rem(80)};
-          background: linear-gradient(90deg, rgba(2, 0, 36, 0) 0%, rgba(255, 0, 0, 1) 50%, rgba(0, 212, 255, 0) 100%);
+          background: linear-gradient(90deg, rgba(2, 0, 36, 0) 0%, rgba(26, 176, 29, 1) 50%, rgba(0, 212, 255, 0) 100%);
         }
       }
     }
@@ -191,4 +192,37 @@ export const Inner = styled.div`
   padding: ${rem(14)} ${rem(14)};
   width: 100%;
   height: 100%;
+`
+
+export const RadioGroup = styled(StockRadioGroup)`
+  * {
+    box-sizing: content-box;
+  }
+`
+
+export const CountWrapper = styled.div`
+  display: inline-flex;
+  width: 100%;
+`
+
+export const CountButton = styled.button`
+  cursor: pointer;
+  color: rgb(26, 176, 29);
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(26, 176, 29);
+  border-radius: 1px;
+  padding: 4px;
+  flex: 1 1 0%;
+  margin-bottom: 0px;
+  margin-right: 2px;
+  text-align: center;
+  font-weight: 900;
+  height: 30px;
+  background-color: white;
+  
+  &:hover {
+    background-color: rgb(26, 176, 29);
+    color: white;
+  }
 `

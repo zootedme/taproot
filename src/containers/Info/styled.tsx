@@ -49,10 +49,10 @@ export const Links = styled.div`
     }
 
     &:hover {
-      color: #de0000;
+      color: #0e690f;
 
       svg path {
-        fill: #de0000;
+        fill: #0e690f;
       }
     }
   }
