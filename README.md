@@ -23,6 +23,13 @@ like to review it.
             <br />
             <sub><b>Julia </b></sub>
         </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/teddyknox">
+            <img src="https://avatars.githubusercontent.com/u/1178653?v=4" width="100;" alt="teddyknox"/>
+            <br />
+            <sub><b>Teddy Knox</b></sub>
+        </a>
     </td></tr>
 </table>
 <!-- readme: contributors -end -->
