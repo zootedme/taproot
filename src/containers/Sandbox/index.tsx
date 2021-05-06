@@ -202,9 +202,9 @@ const Sandbox: React.FC<Props> = ({ file }: Props) => {
 
   const overlayFile = (overlay?: string): string => {
     if (overlay === 'block') {
-      return '/static/images/green-square.png'
+      return '/taproot/static/images/green-square.png'
     } else {
-      return '/static/images/mask.svg';
+      return '/taproot/static/images/mask.svg';
     }
   }
 
@@ -224,7 +224,7 @@ const Sandbox: React.FC<Props> = ({ file }: Props) => {
     <S.Wrapper preview={file} cursor={cursor}>
       <Stage width={STAGE_WIDTH} height={STAGE_HEIGHT} ref={stageRef} className="stage">
         <Layer>
-          <Figure fit src={file || "/static/images/default.png"} />
+          <Figure fit src={file || "/taproot/static/images/default.png"} />
           {overlays.map((overlay, index) => {
             return <Figure
               key={index}
@@ -283,7 +283,7 @@ const Sandbox: React.FC<Props> = ({ file }: Props) => {
               as="a"
               target="_blank"
               rel="noreferrer"
-              href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftaproot.fish&text=Do%20your%20part%20to%20signal%20your%20support%20for%20the%20Bitcoin%20Taproot%20upgrade%21%20Smaller%20and%20faster%20transactions%20with%20Schnorr%21%20Increased%20privacy%20for%20all%20types%20of%20transactions%21&hashtags=taproot"
+              href="https://twitter.com/intent/tweet?text=If%20your%20coin%20has%20a%20dev%20team%2C%20might%20as%20well%20use%20them%20right%3F%20%F0%9F%99%83%0A%0AGet%20your%20new%20prof%20pic%20flair%20here%20to%20signal%20support%20for%20the%20%23Bitcoin%20Taproot%20upgrade.%0A%0ABetter%20%23throughput.%20%E2%9C%85%20Better%20%23privacy.%20%E2%9C%85%20%23Taproot.%20%F0%9F%9F%A9%0A%0Ahttps%3A%2F%2Ftaproot.fish%0A"
             >
               <IconShare />
               Share

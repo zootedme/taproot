@@ -20,9 +20,8 @@ const Info: React.FC<Props> = ({ onDrop }: Props) => {
         <Col xs={12}>
           <h1>Taproot Mask</h1>
           <p>
-            Do your part to signal your support for the Bitcoin Taproot upgrade!
-            Smaller and faster transactions with Schnorr!
-            Increased privacy for all types of transactions! <br/><br/>
+            Signal your support for the Bitcoin network Taproot upgrade!
+            With Taproot everyone wins: network throughput goes up and transactions become more private. We like Taproot. <br/><br/>
             Upload your photo, choose your mask, and download or share with the Twitter button.
           </p>
           <S.Links>

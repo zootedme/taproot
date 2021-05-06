@@ -32,7 +32,7 @@ const Social: React.FC = () => {
             { name: "stakefish", url: "https://twitter.com/stakefish" },
           ]}
         />
-        <S.SocialLink href="https://github.com/stakefish/taprootmask" target="_blank" rel="noreferrer">
+        <S.SocialLink href="https://github.com/stakefish/taproot" target="_blank" rel="noreferrer">
           <IconGithub />
         </S.SocialLink>
       </S.List>
