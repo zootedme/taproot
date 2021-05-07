@@ -202,9 +202,9 @@ const Sandbox: React.FC<Props> = ({ file }: Props) => {
 
   const overlayFile = (overlay?: string): string => {
     if (overlay === 'block') {
-      return '/static//images/green-square.png'
+      return '/taproot/static/images/green-square.png'
     } else {
-      return '/static//images/mask.svg';
+      return '/taproot/static/images/mask.svg';
     }
   }
 
@@ -224,7 +224,7 @@ const Sandbox: React.FC<Props> = ({ file }: Props) => {
     <S.Wrapper preview={file} cursor={cursor}>
       <Stage width={STAGE_WIDTH} height={STAGE_HEIGHT} ref={stageRef} className="stage">
         <Layer>
-          <Figure fit src={file || "/static//images/default.png"} />
+          <Figure fit src={file || "/taproot/static/images/default.png"} />
           {overlays.map((overlay, index) => {
             return <Figure
               key={index}
