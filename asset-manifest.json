@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.js": "/taproot/static/js/main.d69f53ee.chunk.js",
+    "main.js.map": "/taproot/static/js/main.d69f53ee.chunk.js.map",
+    "runtime-main.js": "/taproot/static/js/runtime-main.0a5e1c5a.js",
+    "runtime-main.js.map": "/taproot/static/js/runtime-main.0a5e1c5a.js.map",
+    "static/css/2.709c2c96.chunk.css": "/taproot/static/css/2.709c2c96.chunk.css",
+    "static/js/2.fff3dbd7.chunk.js": "/taproot/static/js/2.fff3dbd7.chunk.js",
+    "static/js/2.fff3dbd7.chunk.js.map": "/taproot/static/js/2.fff3dbd7.chunk.js.map",
+    "index.html": "/taproot/index.html",
+    "static/css/2.709c2c96.chunk.css.map": "/taproot/static/css/2.709c2c96.chunk.css.map",
+    "static/js/2.fff3dbd7.chunk.js.LICENSE.txt": "/taproot/static/js/2.fff3dbd7.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0a5e1c5a.js",
+    "static/css/2.709c2c96.chunk.css",
+    "static/js/2.fff3dbd7.chunk.js",
+    "static/js/main.d69f53ee.chunk.js"
+  ]
+}
